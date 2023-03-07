@@ -18,7 +18,7 @@ const Product = ({ _id, name, price, description, picture }) => {
 
       <h3 className="font-bold text-lg mb-1">{name}</h3>
 
-      <p className="text-sm leading-4 mb-1">{description}</p>
+      <p className="text-sm leading-4 mb-1 text-gray-500">{description}</p>
 
       <div className="flex grow">
         <span className="text-2xl font-bold grow">${price}</span>
