@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import Product from "@/components/product";
+import { useState } from "react";
 import { initMongoose } from "@/lib/mongoose";
 import { findAllProducts } from "./api/products";
-import Footer from "@/components/Footer";
+import Product from "@/components/product";
+
+import Layout from "@/components/Layout";
 
 export default function Home({ products }) {
   const [search, setSearch] = useState("");
@@ -21,37 +22,38 @@ export default function Home({ products }) {
   }
 
   return (
-    <div className="p-5">
-      <input
-        type="text"
-        placeholder="Search for products..."
-        className="bg-gray-100 w-full py-2 px-4 rounded-xl"
-        onChange={(e) => setSearch(e.target.value)}
-        value={search}
-      />
-      <div>
-        {categoriesNames.map((categoryName) => (
-          <div key={categoryName}>
-            {productsFiltered.find(
-              (product) => product.category === categoryName
-            ) && (
-              <div>
-                <h2 className="text-2xl py-5 capitalize">{categoryName}</h2>
-                <div className="flex gap-5 overflow-x-scroll snap-x scrollbar-hide">
-                  {productsFiltered
-                    .filter((products) => products.category === categoryName)
-                    .map((product) => (
-                      <div key={product._id} className="snap-start">
-                        <Product {...product} />
-                      </div>
-                    ))}
+    <div>
+      <Layout>
+        <input
+          type="text"
+          placeholder="Search for products..."
+          className="bg-gray-100 w-full py-2 px-4 rounded-xl"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+        />
+        <div>
+          {categoriesNames.map((categoryName) => (
+            <div key={categoryName}>
+              {productsFiltered.find(
+                (product) => product.category === categoryName
+              ) && (
+                <div>
+                  <h2 className="text-2xl py-5 capitalize">{categoryName}</h2>
+                  <div className="flex gap-5 overflow-x-scroll snap-x scrollbar-hide">
+                    {productsFiltered
+                      .filter((products) => products.category === categoryName)
+                      .map((product) => (
+                        <div key={product._id} className="snap-start">
+                          <Product {...product} />
+                        </div>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-      <Footer />
+              )}
+            </div>
+          ))}
+        </div>
+      </Layout>
     </div>
   );
 }
