@@ -37,11 +37,14 @@ const CheckoutPage = () => {
             <div className="bg-gray-100 p-3 rounded-xl shrink-0">
               <img className="w-24" src={product.picture} alt={product.name} />
             </div>
-            <div className="pl-4">
-              <h3 className="font-bold text-lg">{product.name}</h3>
-              <p className="text-sm leading-4 text-gray-500">
-                {product.description}
-              </p>
+            <div className="px-3 py-1 flex flex-col">
+              <div className="grow">
+                <h3 className="font-bold text-lg">{product.name}</h3>
+                <p className="text-sm leading-4 text-gray-500">
+                  {product.description}
+                </p>
+              </div>
+
               <div className="flex">
                 <div className="grow">${product.price}</div>
                 <div>
@@ -66,6 +69,28 @@ const CheckoutPage = () => {
             </div>
           </div>
         ))}
+      <div>
+        <input
+          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+          type="text"
+          placeholder="Street address, number"
+        />
+        <input
+          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+          type="text"
+          placeholder="City and postal code"
+        />
+        <input
+          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+          type="text"
+          placeholder="Your names"
+        />
+        <input
+          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+          type="email"
+          placeholder="Email"
+        />
+      </div>
     </Layout>
   );
 };
