@@ -53,90 +53,114 @@ const CheckoutPage = () => {
     <Layout>
       {!productsInfos.length && <p>No products in cart</p>}
       {productsInfos.length &&
-        productsInfos.map((product) => (
-          <div key={product._id} className="flex mb-5">
-            <div className="bg-gray-100 p-3 rounded-xl shrink-0 max-h-32">
-              <img className="w-24 " src={product.picture} alt={product.name} />
-            </div>
-            <div className="px-3 py-1 flex flex-col">
-              <div className="grow pb-2">
-                <h3 className="font-bold text-lg">{product.name}</h3>
-                <p className="text-sm leading-4 text-gray-500">
-                  {product.description}
-                </p>
+        productsInfos.map((product) => {
+          const amount = selectedProducts.filter(
+            (id) => id === product._id
+          ).length;
+          if (amount === 0) return;
+          return (
+            <div key={product._id} className="flex mb-5">
+              <div className="bg-gray-100 p-3 rounded-xl shrink-0 max-h-32">
+                <img
+                  className="w-24 "
+                  src={product.picture}
+                  alt={product.name}
+                />
               </div>
+              <div className="px-3 py-1 flex flex-col">
+                <div className="grow pb-2">
+                  <h3 className="font-bold text-lg">{product.name}</h3>
+                  <p className="text-sm leading-4 text-gray-500">
+                    {product.description}
+                  </p>
+                </div>
 
-              <div className="flex">
-                <div className="grow">${product.price}</div>
-                <div>
-                  <button
-                    onClick={() => removeProduct(product._id)}
-                    className="border border-emerald-500 px-2 rounded-lg text-emerald-400"
-                  >
-                    -
-                  </button>
-                  <span className="px-2">
-                    {selectedProducts.filter((id) => product._id === id).length}
-                  </span>
+                <div className="flex">
+                  <div className="grow">${product.price}</div>
+                  <div>
+                    <button
+                      onClick={() => removeProduct(product._id)}
+                      className="border border-emerald-500 px-2 rounded-lg text-emerald-400"
+                    >
+                      -
+                    </button>
+                    <span className="px-2">
+                      {
+                        selectedProducts.filter((id) => product._id === id)
+                          .length
+                      }
+                    </span>
 
-                  <button
-                    onClick={() => addProduct(product._id)}
-                    className="bg-emerald-500 px-2 rounded-lg text-white"
-                  >
-                    +
-                  </button>
+                    <button
+                      onClick={() => addProduct(product._id)}
+                      className="bg-emerald-500 px-2 rounded-lg text-white"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+          );
+        })}
+      <form action="/api/checkout" method="post">
+        <div className="mt-4">
+          <input
+            className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+            type="text"
+            placeholder="Street address, number"
+            value={address}
+            name="address"
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <input
+            className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+            type="text"
+            placeholder="City and postal code"
+            value={city}
+            name="city"
+            onChange={(e) => setCity(e.target.value)}
+          />
+          <input
+            className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+            type="text"
+            placeholder="Your names"
+            value={name}
+            name="name"
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
+            type="email"
+            placeholder="Email"
+            value={email}
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="mt-4">
+          <div className="flex my-3">
+            <h3 className="grow font-bold text-gray-400">Subtotal: </h3>
+            <p className="font-bold">${subtotal}</p>
           </div>
-        ))}
-      <div className="mt-4">
-        <input
-          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
-          type="text"
-          placeholder="Street address, number"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <input
-          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
-          type="text"
-          placeholder="City and postal code"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <input
-          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
-          type="text"
-          placeholder="Your names"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          className="bg-gray-100 w-full rounded-lg px-4 py-2 mb-2"
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="mt-4">
-        <div className="flex my-3">
-          <h3 className="grow font-bold text-gray-400">Subtotal: </h3>
-          <p className="font-bold">${subtotal}</p>
+          <div className="flex my-3">
+            <h3 className="grow font-bold text-gray-400">Delivery: </h3>
+            <p className="font-bold">${deliveryPrice}</p>
+          </div>
+          <div className="flex my-3 border-t-2 border-dashed border-emerald-500 pt-3">
+            <h3 className="grow font-bold text-gray-400">Total: </h3>
+            <p className="font-bold">${total}</p>
+          </div>
         </div>
-        <div className="flex my-3">
-          <h3 className="grow font-bold text-gray-400">Delivery: </h3>
-          <p className="font-bold">${deliveryPrice}</p>
-        </div>
-        <div className="flex my-3 border-t-2 border-dashed border-emerald-500 pt-3">
-          <h3 className="grow font-bold text-gray-400">Total: </h3>
-          <p className="font-bold">${total}</p>
-        </div>
-      </div>
-      <button className="bg-emerald-500 p-5 text-white w-full font-bold rounded-xl my-4 shadow-md shadow-emerald-300">
-        Pay ${total}
-      </button>
+        <input
+          type="hidden"
+          name="products"
+          value={selectedProducts.join(",")}
+        />
+        <button className="bg-emerald-500 p-5 text-white w-full font-bold rounded-xl my-4 shadow-md shadow-emerald-300">
+          Pay ${total}
+        </button>
+      </form>
     </Layout>
   );
 };
